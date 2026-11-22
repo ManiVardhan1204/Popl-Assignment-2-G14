@@ -16,23 +16,6 @@
       '()
       (cons (f (car lst)) (my-map f (cdr lst)))))
 
-; (insert-if-short x lst n): copy of lst where x is put at the front of every
-; list (at every nesting level, including lst itself and empty lists) whose
-; original length is less than n.
-; Recursive reading: first process every element (sublists recursively, atoms
-; unchanged), then cons x onto the result if lst itself was shorter than n.
-; The length is taken from the original lst, before anything is inserted.
-(define (insert-if-short x lst n)
-  (let ((processed
-         (my-map (lambda (e)
-                   (if (or (null? e) (pair? e))
-                       (insert-if-short x e n)
-                       e))
-                 lst)))
-    (if (< (my-length lst) n)
-        (cons x processed)
-        processed)))
-
 ; (make-inserter x len-ok?): returns a function of one list. That function
 ; puts x at the front of every list (at every nesting level, including the
 ; list it is given and empty lists) whose original length satisfies len-ok?.
@@ -52,3 +35,9 @@
                     (cons x processed)
                     processed)))))
     insert))
+
+; (insert-if-short x lst n): insert x at the front of every list, at every
+; nesting level, whose original length is less than n.
+; Defined with make-inserter, using the length test (< len n).
+(define (insert-if-short x lst n)
+  ((make-inserter x (lambda (len) (< len n))) lst))
