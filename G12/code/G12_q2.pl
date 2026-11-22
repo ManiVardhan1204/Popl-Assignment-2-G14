@@ -34,3 +34,46 @@ combine(L, LV, R, RV, divide(L, R), V) :-
     RV =\= 0,
     LV mod RV =:= 0,
     V is LV // RV.
+
+% op_info(+Tree, -Symbol, -Prec, -Left, -Right)
+% Tree is an operator node with symbol Symbol, precedence Prec and operands
+% Left and Right. + and - have precedence 1, * and / have precedence 2.
+op_info(plus(L, R),   '+', 1, L, R).
+op_info(minus(L, R),  '-', 1, L, R).
+op_info(times(L, R),  '*', 2, L, R).
+op_info(divide(L, R), '/', 2, L, R).
+
+% prec(+Tree, -Prec)
+% Prec is the precedence of Tree's top operator. A plain number gets 3,
+% higher than any operator, so it never needs brackets.
+prec(N, 3) :- integer(N).
+prec(T, P) :- op_info(T, _, P, _, _).
+
+% needs_brackets(+Side, +ChildPrec, +ParentPrec)
+% A left operand needs brackets when its precedence is lower than the
+% parent's; a right operand when it is the same or lower.
+needs_brackets(left,  ChildP, ParentP) :- ChildP <  ParentP.
+needs_brackets(right, ChildP, ParentP) :- ChildP =< ParentP.
+
+% tree_string(+Tree, -String)
+% String is Tree written in canonical form: no spaces, and brackets only
+% where the rules above require them.
+tree_string(N, S) :-
+    integer(N),
+    number_string(N, S).
+tree_string(T, S) :-
+    op_info(T, Sym, P, L, R),
+    operand_string(L, left,  P, LS),
+    operand_string(R, right, P, RS),
+    atomics_to_string([LS, Sym, RS], S).
+
+% operand_string(+Tree, +Side, +ParentPrec, -String)
+% String is Tree as an operand on Side of a parent with precedence
+% ParentPrec, wrapped in brackets if needs_brackets/3 says so.
+operand_string(T, Side, ParentP, S) :-
+    tree_string(T, S0),
+    prec(T, ChildP),
+    (   needs_brackets(Side, ChildP, ParentP)
+    ->  atomics_to_string(['(', S0, ')'], S)
+    ;   S = S0
+    ).
