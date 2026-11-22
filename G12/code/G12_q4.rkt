@@ -32,3 +32,23 @@
     (if (< (my-length lst) n)
         (cons x processed)
         processed)))
+
+; (make-inserter x len-ok?): returns a function of one list. That function
+; puts x at the front of every list (at every nesting level, including the
+; list it is given and empty lists) whose original length satisfies len-ok?.
+; Recursive reading of the returned function `insert`: process every element
+; (sublists recursively, atoms unchanged), then cons x onto the result if
+; (len-ok? (my-length lst)) holds for the original lst.
+(define (make-inserter x len-ok?)
+  (letrec ((insert
+            (lambda (lst)
+              (let ((processed
+                     (my-map (lambda (e)
+                               (if (or (null? e) (pair? e))
+                                   (insert e)
+                                   e))
+                             lst)))
+                (if (len-ok? (my-length lst))
+                    (cons x processed)
+                    processed)))))
+    insert))
