@@ -1,7 +1,7 @@
 ; Tests for S2. Run from the repo folder:
 ;   racket
-;   (enter! "G12/code/G12_q4.rkt")
-;   (load "G12/tests/test_q4.rktl")
+;   (enter! "14/code/14_q4.rkt")
+;   (load "14/tests/test_q4.rktl")
 
 ; (check name actual expected): prints PASS if actual equals expected, else FAIL.
 (define (check name actual expected)

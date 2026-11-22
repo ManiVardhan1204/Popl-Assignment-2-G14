@@ -1,6 +1,6 @@
 % Tests for P1. Run from the repo folder with:
-%   swipl -q -f G12/tests/test_q1.pl -g run_tests -t halt
-:- consult('../code/G12_q1.pl').
+%   swipl -q -f 14/tests/test_q1.pl -g run_tests -t halt
+:- consult('../code/14_q1.pl').
 
 % check(+Name, +Goal)
 % Prints PASS if Goal succeeds, FAIL if it fails or raises an error.

@@ -1,7 +1,7 @@
 ; Tests for S1. Run from the repo folder:
 ;   racket
-;   (enter! "G12/code/G12_q3.rkt")
-;   (load "G12/tests/test_q3.rktl")
+;   (enter! "14/code/14_q3.rkt")
+;   (load "14/tests/test_q3.rktl")
 
 ; (output-of thunk): runs thunk and returns everything it printed, as a string.
 (define (output-of thunk)
