@@ -77,3 +77,28 @@ operand_string(T, Side, ParentP, S) :-
     ->  atomics_to_string(['(', S0, ')'], S)
     ;   S = S0
     ).
+
+% generate_equation(+List, -Equation)
+% Equation is a string "L=R" where L is an expression over a non-empty front
+% part of List and R over the rest, numbers in order, both with equal value.
+% Fails (no loop, no error) when there is none, including for [] and [_].
+generate_equation(List, Equation) :-
+    split(List, LeftNums, RightNums),
+    expr(LeftNums,  LeftTree,  Value),
+    expr(RightNums, RightTree, Value),
+    tree_string(LeftTree,  LeftStr),
+    tree_string(RightTree, RightStr),
+    atomics_to_string([LeftStr, "=", RightStr], Equation).
+
+% all_equations(+List, -Equations)
+% Equations is the list of all valid equations for List, without duplicates,
+% sorted in standard order. It is [] when there are none.
+all_equations(List, Equations) :-
+    findall(E, generate_equation(List, E), Es),
+    sort(Es, Equations).
+
+% count_equations(+List, -N)
+% N is the number of valid equations for List.
+count_equations(List, N) :-
+    all_equations(List, Es),
+    length(Es, N).
