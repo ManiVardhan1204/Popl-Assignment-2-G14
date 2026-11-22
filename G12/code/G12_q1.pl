@@ -1,4 +1,5 @@
 :- use_module(library(lists)).
+:- use_module(library(aggregate)).
 
 % solution(-S)
 % S is a candidate solution: one p(Name, Dept, Lang, Project) term per friend,
@@ -77,3 +78,11 @@ main :-
            satisfies([1,2,3,4,5,6,7,8], S) )),
     forall(member(p(Name, Dept, Lang, Proj), S),
            format("~w = [~w, ~w, ~w]~n", [Name, Dept, Lang, Proj])).
+
+% count_solutions(+Active, -N)
+% N is the number of candidate solutions in which every clue listed in Active
+% holds. Clues not in Active are ignored.
+count_solutions(Active, N) :-
+    aggregate_all(count,
+                  ( solution(S), satisfies(Active, S) ),
+                  N).
