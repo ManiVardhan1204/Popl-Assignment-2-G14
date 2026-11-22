@@ -54,3 +54,21 @@
         ((and (null? (tree-left t)) (null? (tree-right t))) 1)
         (else (+ (leaf-count (tree-left t))
                  (leaf-count (tree-right t))))))
+
+; (print-inorder tree): displays the inorder list of tree, then a newline.
+(define (print-inorder tree)
+  (display (inorder tree))
+  (newline))
+
+; (print-all-traversals tree): displays the inorder, preorder and postorder
+; lists of tree, one per line.
+(define (print-all-traversals tree)
+  (display (inorder tree))   (newline)
+  (display (preorder tree))  (newline)
+  (display (postorder tree)) (newline))
+
+; (print-height-and-leaves tree): displays the list (height leaf-count),
+; then a newline.
+(define (print-height-and-leaves tree)
+  (display (list (height tree) (leaf-count tree)))
+  (newline))
