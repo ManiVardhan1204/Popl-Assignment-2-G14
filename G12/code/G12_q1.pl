@@ -63,3 +63,17 @@ clue(8, S) :-
     memberchk(p(_, Dept, Lang, data), S),
     Dept == research,
     Lang \== javascript.
+
+% satisfies(+Clues, +S)
+% True when every clue number in the list Clues holds in solution S.
+satisfies(Clues, S) :-
+    forall(member(C, Clues), clue(C, S)).
+
+% main
+% Finds the first solution that satisfies clues 1 to 8 and prints one line per
+% friend, in the order Alex, Ben, Carla, Dana, as  Name = [Dept, Lang, Project].
+main :-
+    once(( solution(S),
+           satisfies([1,2,3,4,5,6,7,8], S) )),
+    forall(member(p(Name, Dept, Lang, Proj), S),
+           format("~w = [~w, ~w, ~w]~n", [Name, Dept, Lang, Proj])).
