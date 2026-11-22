@@ -65,6 +65,11 @@ clue(8, S) :-
     Dept == research,
     Lang \== javascript.
 
+% CLUE 9: The friend who likes Python prefers the AI project.
+clue(9, S) :-
+    memberchk(p(_, _, python, Proj), S),
+    Proj == 'AI'.
+
 % satisfies(+Clues, +S)
 % True when every clue number in the list Clues holds in solution S.
 satisfies(Clues, S) :-
